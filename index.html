@@ -6,216 +6,150 @@
     <title>معاني الكلمات</title>
     <style>
         :root {
-            --bg-color: #f8fafc;
-            --container-bg: #ffffff;
-            --text-color: #1e293b;
-            --primary-color: #22c55e; /* أخضر فاتح للكلمة */
-            --secondary-color: #3b82f6; /* أزرق مشرق للجمل */
-            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --bg-color: #f0f2f5;
             --card-bg: #ffffff;
+            --text-main: #1c1e21;
+            --green-light: #2ecc71; /* لون الكلمة */
+            --blue-bright: #007bff; /* لون الجمل */
         }
-
         [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --container-bg: #1e293b;
-            --text-color: #f1f5f9;
-            --primary-color: #4ade80;
-            --secondary-color: #60a5fa;
-            --card-bg: #334155;
-            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --bg-color: #18191a;
+            --card-bg: #242526;
+            --text-main: #e4e6eb;
+            --green-light: #2ecc71;
+            --blue-bright: #459fff;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
+            color: var(--text-main);
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding-top: 50px;
+            margin: 0;
             direction: rtl;
         }
-
-        .container {
+        .app-container {
             width: 90%;
-            max-width: 550px;
-            background: var(--container-bg);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+            max-width: 500px;
+            text-align: center;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 20px;
         }
-
-        h1 { font-size: 1.8rem; margin: 0; color: var(--text-color); }
-
-        .theme-toggle {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .search-box {
+        .search-area {
             display: flex;
             gap: 10px;
-            margin-bottom: 2rem;
+            margin-bottom: 30px;
         }
-
         input {
             flex: 1;
             padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            background: var(--card-bg);
-            color: var(--text-color);
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 18px;
             outline: none;
         }
-
-        input:focus { border-color: var(--secondary-color); }
-
-        button#searchBtn {
-            padding: 0 25px;
-            background-color: var(--secondary-color);
-            color: white;
+        button {
+            padding: 10px 20px;
+            border-radius: 10px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            background: var(--blue-bright);
+            color: white;
             cursor: pointer;
             font-weight: bold;
         }
-
-        #resultArea { margin-top: 1.5rem; }
-
-        .card {
+        #result {
+            margin-top: 20px;
+        }
+        .result-card {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             text-align: right;
-            border-right: 6px solid var(--primary-color);
-            animation: fadeIn 0.3s ease-in-out;
+            border-right: 6px solid var(--green-light);
         }
-
-        .card h2 { 
-            margin: 0 0 15px 0; 
-            color: var(--primary-color); 
-            font-size: 2.2rem; 
-            font-weight: 800;
+        .result-card h2 {
+            color: var(--green-light);
+            margin: 0 0 15px 0;
+            font-size: 28px;
         }
-
-        .card p { 
-            margin: 10px 0; 
-            font-size: 1.4rem; 
-            color: var(--secondary-color); 
+        .result-card p {
+            color: var(--blue-bright);
+            font-size: 20px;
             line-height: 1.6;
+            margin: 10px 0;
             font-weight: 500;
         }
-
-        .status-msg { font-size: 1.1rem; color: #94a3b8; text-align: center; }
-        .error { color: #ef4444; font-weight: bold; text-align: center; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 500px) {
-            .search-box { flex-direction: column; }
-            button#searchBtn { padding: 15px; }
-        }
+        .msg { color: #888; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
     <div class="header">
         <h1>معاني الكلمات</h1>
-        <button class="theme-toggle" id="themeBtn">الوضع الليلي</button>
+        <button onclick="toggleTheme()">الوضع الليلي</button>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="اكتب الكلمة هنا...">
-        <button id="searchBtn">بحث</button>
+    <div class="search-area">
+        <input type="text" id="wordInput" placeholder="اكتب الكلمة هنا...">
+        <button onclick="search()">بحث</button>
     </div>
 
-    <div id="resultArea">
+    <div id="result">
         </div>
 </div>
 
 <script>
-    // الرابط المباشر للملف
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DLTYDgoPf_OPMi-vjp6Fx7JJN4_PNdRrBT8vMICrc1Q/export?format=csv';
+    // رابط جوجل شيت الخاص بك (بصيغة CSV)
+    const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1DLTYDgoPf_OPMi-vjp6Fx7JJN4_PNdRrBT8vMICrc1Q/gviz/tq?tqx=out:csv";
 
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const resultArea = document.getElementById('resultArea');
-    const themeBtn = document.getElementById('themeBtn');
-
-    // تبديل الوضع الليلي
-    themeBtn.addEventListener('click', () => {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        themeBtn.innerText = isDark ? 'الوضع الليلي' : 'الوضع النهاري';
-    });
-
-    // وظيفة معالجة نصوص الـ CSV المعقدة
-    function parseCSV(text) {
-        const rows = [];
-        const lines = text.split(/\r?\n/);
-        for (let line of lines) {
-            // تقسيم السطر مع مراعاة النصوص التي قد تحتوي على فواصل بداخلها
-            const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            rows.push(cols.map(c => c.replace(/^"|"$/g, '').trim()));
-        }
-        return rows;
+    function toggleTheme() {
+        const doc = document.documentElement;
+        const current = doc.getAttribute('data-theme');
+        doc.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     }
 
-    async function doSearch() {
-        const query = searchInput.value.trim().toLowerCase();
-        if (!query) return;
-
-        resultArea.innerHTML = '<p class="status-msg">جاري البحث...</p>';
+    async function search() {
+        const word = document.getElementById('wordInput').value.trim().toLowerCase();
+        const resultDiv = document.getElementById('result');
+        
+        if (!word) return;
+        resultDiv.innerHTML = "<p class='msg'>جاري البحث...</p>";
 
         try {
-            const response = await fetch(sheetUrl);
-            if (!response.ok) throw new Error();
+            const response = await fetch(spreadsheetUrl);
+            const text = await response.text();
             
-            const rawData = await response.text();
-            const dataRows = parseCSV(rawData);
-            
-            // البحث في العمود الأول
-            const match = dataRows.find(r => r[0] && r[0].toLowerCase() === query);
+            // تحويل النص إلى أسطر ثم مصفوفة
+            const rows = text.split('\n').map(row => 
+                row.split(',').map(cell => cell.replace(/"/g, '').trim())
+            );
 
-            if (match) {
-                resultArea.innerHTML = `
-                    <div class="card">
-                        <h2>${match[0]}</h2>
-                        <p>${match[1] || ''}</p>
-                        <p>${match[2] || ''}</p>
+            // البحث عن الكلمة في العمود الأول
+            const found = rows.find(r => r[0].toLowerCase() === word);
+
+            if (found) {
+                resultDiv.innerHTML = `
+                    <div class="result-card">
+                        <h2>${found[0]}</h2>
+                        <p>${found[1] || ''}</p>
+                        <p>${found[2] || ''}</p>
                     </div>
                 `;
             } else {
-                resultArea.innerHTML = '<p class="error">الكلمة غير موجودة في قاعدتنا</p>';
+                resultDiv.innerHTML = "<p class='msg'>الكلمة غير موجودة في قاعدتنا</p>";
             }
-        } catch (err) {
-            resultArea.innerHTML = '<p class="error">خطأ: تأكد من أن ملف Google Sheet متاح للجميع (Public)</p>';
+        } catch (error) {
+            resultDiv.innerHTML = "<p style='color:red;'>حدث خطأ! تأكد أن رابط Google Sheet متاح للجميع (Public).</p>";
+            console.error(error);
         }
     }
-
-    searchBtn.addEventListener('click', doSearch);
-    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSearch(); });
 </script>
 
 </body>
