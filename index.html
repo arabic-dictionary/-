@@ -3,33 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قاموسي الشخصي المطور</title>
+    <title>معاني الكلمات</title>
     <style>
-        /* تعريف الألوان والمتغيرات المعدلة */
         :root {
-            --bg-color: #f0f4f8;
+            --bg-color: #f8fafc;
             --container-bg: #ffffff;
-            --text-color: #2d3436;
-            --primary-color: #2ecc71; /* أخضر فاتح للعنوان */
-            --secondary-color: #00a8ff; /* أزرق مشرق للجمل */
-            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --text-color: #1e293b;
+            --primary-color: #22c55e; /* أخضر فاتح للكلمة */
+            --secondary-color: #3b82f6; /* أزرق مشرق للجمل */
+            --shadow: 0 10px 25px rgba(0,0,0,0.05);
             --card-bg: #ffffff;
-            --input-bg: #ffffff;
         }
 
         [data-theme="dark"] {
-            --bg-color: #121212;
-            --container-bg: #1e1e1e;
-            --text-color: #f5f6fa;
-            --primary-color: #55efc4; /* أخضر أفتح للوضع الليلي */
-            --secondary-color: #48dbfb; /* أزرق مشرق جداً */
-            --card-bg: #2d2d2d;
-            --input-bg: #3d3d3d;
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --primary-color: #4ade80;
+            --secondary-color: #60a5fa;
+            --card-bg: #334155;
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -37,117 +34,106 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            transition: background 0.3s ease;
-            direction: rtl; /* التأكد من اتجاه الصفحة بالكامل */
+            direction: rtl;
         }
 
         .container {
-            width: 95%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 550px;
             background: var(--container-bg);
-            padding: 30px;
+            padding: 2rem;
             border-radius: 20px;
             box-shadow: var(--shadow);
-            text-align: center;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 2rem;
         }
 
-        h1 { font-size: 1.8rem; margin: 0; }
+        h1 { font-size: 1.8rem; margin: 0; color: var(--text-color); }
 
         .theme-toggle {
-            background: var(--primary-color);
+            background: var(--secondary-color);
+            color: white;
             border: none;
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
+            font-size: 0.9rem;
         }
 
-        /* حقل البحث */
         .search-box {
             display: flex;
-            gap: 12px;
-            margin-bottom: 35px;
+            gap: 10px;
+            margin-bottom: 2rem;
         }
 
         input {
-            flex: 2;
+            flex: 1;
             padding: 15px;
-            border: 2px solid #ddd;
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
-            font-size: 1.1rem;
-            background: var(--input-bg);
+            font-size: 1.2rem;
+            background: var(--card-bg);
             color: var(--text-color);
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--secondary-color);
             outline: none;
         }
 
+        input:focus { border-color: var(--secondary-color); }
+
         button#searchBtn {
-            flex: 1;
-            padding: 15px;
+            padding: 0 25px;
             background-color: var(--secondary-color);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 1.1rem;
-            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: bold;
         }
 
-        button#searchBtn:active { transform: scale(0.95); }
-
-        /* تنسيق الـ Card */
-        #resultArea { margin-top: 25px; }
+        #resultArea { margin-top: 1.5rem; }
 
         .card {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 16px;
             box-shadow: var(--shadow);
-            text-align: right; /* محاذاة لليمين */
-            border-right: 8px solid var(--primary-color);
-            animation: slideUp 0.4s ease-out;
+            text-align: right;
+            border-right: 6px solid var(--primary-color);
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .card h2 { 
-            margin-top: 0; 
+            margin: 0 0 15px 0; 
             color: var(--primary-color); 
-            font-size: 2rem; /* تكبير اسم الكلمة */
-            margin-bottom: 15px;
+            font-size: 2.2rem; 
+            font-weight: 800;
         }
 
         .card p { 
-            line-height: 1.8; 
-            margin: 12px 0; 
-            font-size: 1.2rem; /* تكبير خط الجمل */
-            color: var(--secondary-color); /* الجمل بالأزرق المشرق */
+            margin: 10px 0; 
+            font-size: 1.4rem; 
+            color: var(--secondary-color); 
+            line-height: 1.6;
             font-weight: 500;
         }
 
-        .error { color: #ff7675; font-size: 1.1rem; font-weight: bold; }
+        .status-msg { font-size: 1.1rem; color: #94a3b8; text-align: center; }
+        .error { color: #ef4444; font-weight: bold; text-align: center; }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* الموبايل */
-        @media (max-width: 480px) {
+        @media (max-width: 500px) {
             .search-box { flex-direction: column; }
-            h1 { font-size: 1.4rem; }
+            button#searchBtn { padding: 15px; }
         }
     </style>
 </head>
@@ -155,12 +141,12 @@
 
 <div class="container">
     <div class="header">
-        <h1>قاموسي الشخصي</h1>
+        <h1>معاني الكلمات</h1>
         <button class="theme-toggle" id="themeBtn">الوضع الليلي</button>
     </div>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ابحث عن كلمة...">
+        <input type="text" id="searchInput" placeholder="اكتب الكلمة هنا...">
         <button id="searchBtn">بحث</button>
     </div>
 
@@ -169,63 +155,67 @@
 </div>
 
 <script>
-    const sheetId = '1DLTYDgoPf_OPMi-vjp6Fx7JJN4_PNdRrBT8vMICrc1Q';
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+    // الرابط المباشر للملف
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DLTYDgoPf_OPMi-vjp6Fx7JJN4_PNdRrBT8vMICrc1Q/export?format=csv';
 
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const resultArea = document.getElementById('resultArea');
     const themeBtn = document.getElementById('themeBtn');
 
-    // تبديل الثيم
+    // تبديل الوضع الليلي
     themeBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            themeBtn.innerText = 'الوضع الليلي';
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeBtn.innerText = 'الوضع النهاري';
-        }
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        themeBtn.innerText = isDark ? 'الوضع الليلي' : 'الوضع النهاري';
     });
 
-    async function searchWord() {
+    // وظيفة معالجة نصوص الـ CSV المعقدة
+    function parseCSV(text) {
+        const rows = [];
+        const lines = text.split(/\r?\n/);
+        for (let line of lines) {
+            // تقسيم السطر مع مراعاة النصوص التي قد تحتوي على فواصل بداخلها
+            const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            rows.push(cols.map(c => c.replace(/^"|"$/g, '').trim()));
+        }
+        return rows;
+    }
+
+    async function doSearch() {
         const query = searchInput.value.trim().toLowerCase();
         if (!query) return;
 
-        resultArea.innerHTML = '<p>جاري البحث عن الكلمة...</p>';
+        resultArea.innerHTML = '<p class="status-msg">جاري البحث...</p>';
 
         try {
-            const response = await fetch(csvUrl);
-            const data = await response.text();
+            const response = await fetch(sheetUrl);
+            if (!response.ok) throw new Error();
             
-            // تقسيم الأسطر مع مراعاة الفواصل
-            const rows = data.split('\n').map(row => row.split(','));
+            const rawData = await response.text();
+            const dataRows = parseCSV(rawData);
             
-            // البحث (العمود الأول للكلمة)
-            const foundRow = rows.find(row => row[0] && row[0].trim().toLowerCase() === query);
+            // البحث في العمود الأول
+            const match = dataRows.find(r => r[0] && r[0].toLowerCase() === query);
 
-            if (foundRow) {
-                // عرض النتيجة بالتنسيق الجديد
+            if (match) {
                 resultArea.innerHTML = `
                     <div class="card">
-                        <h2>${foundRow[0]}</h2>
-                        <p>${foundRow[1] || ''}</p>
-                        <p>${foundRow[2] || ''}</p>
+                        <h2>${match[0]}</h2>
+                        <p>${match[1] || ''}</p>
+                        <p>${match[2] || ''}</p>
                     </div>
                 `;
             } else {
                 resultArea.innerHTML = '<p class="error">الكلمة غير موجودة في قاعدتنا</p>';
             }
-        } catch (error) {
-            resultArea.innerHTML = '<p class="error">عذراً، فشل الاتصال بقاعدة البيانات</p>';
+        } catch (err) {
+            resultArea.innerHTML = '<p class="error">خطأ: تأكد من أن ملف Google Sheet متاح للجميع (Public)</p>';
         }
     }
 
-    searchBtn.addEventListener('click', searchWord);
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchWord();
-    });
+    searchBtn.addEventListener('click', doSearch);
+    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSearch(); });
 </script>
 
 </body>
