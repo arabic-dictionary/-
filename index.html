@@ -3,34 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معاني الكلمات - نظام API الذكي</title>
+    <title>قاموس البحث الذكي</title>
     <style>
         :root {
-            /* الوضع النهاري */
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
-            --text-word: #2ecc71;    /* الكلمة الأساسية - أخضر مشرق */
-            --text-labels: #27ae60;  /* العناوين - أخضر هادئ */
-            --text-content: #1a1a1a; /* محتوى الجمل - أسود */
+            --text-word: #2ecc71;
+            --text-labels: #27ae60;
+            --text-content: #1a1a1a;
             --input-bg: #ffffff;
             --shadow: 0 10px 25px rgba(0,0,0,0.05);
             --footer-color: #94a3b8;
         }
 
         [data-theme="dark"] {
-            /* الوضع الليلي */
             --bg-body: #0f172a;
             --bg-card: #1e293b;
-            --text-word: #2ecc71;    
-            --text-labels: #4ade80;  
-            --text-content: #f8fafc; /* محتوى الجمل - أبيض */
+            --text-word: #2ecc71;
+            --text-labels: #4ade80;
+            --text-content: #f8fafc;
             --input-bg: #334155;
             --shadow: 0 10px 30px rgba(0,0,0,0.4);
             --footer-color: #64748b;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-content);
             margin: 0;
@@ -38,7 +36,6 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
             direction: rtl;
         }
 
@@ -53,16 +50,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        h1 { font-size: 1.8rem; margin: 0; }
-
-        /* منطقة البحث */
-        .search-row {
+        /* حاوية البحث */
+        .search-container {
+            position: relative;
             display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 5px;
         }
 
         input#wordInput {
@@ -75,102 +71,91 @@
             color: var(--text-content);
             outline: none;
             box-shadow: var(--shadow);
-            transition: border-color 0.3s;
+            transition: 0.3s;
         }
 
-        input#wordInput:focus {
-            border-color: var(--text-word);
-        }
+        input#wordInput:focus { border-color: var(--text-word); }
 
         button#searchBtn {
-            padding: 0 30px;
+            padding: 0 25px;
             border-radius: 14px;
             border: none;
             background: var(--text-word);
             color: white;
             font-weight: bold;
-            font-size: 1.1rem;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
         }
 
-        button#searchBtn:active { transform: scale(0.96); }
-        button#searchBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+        /* قائمة الاقتراحات والسجل */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            margin-top: 8px;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
 
-        /* عرض النتائج */
-        #resultArea { margin-top: 20px; }
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
+        .dropdown-item:hover { background: rgba(46, 204, 113, 0.1); }
+        .dropdown-item.history-item::before { content: "🕒"; font-size: 0.9rem; }
+        .dropdown-item.suggest-item::before { content: "🔍"; font-size: 0.9rem; }
+
+        /* نتائج البحث */
         .result-card {
             background: var(--bg-card);
-            padding: 35px;
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-            border-right: 8px solid var(--text-word);
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        .result-card h2 {
-            color: var(--text-word);
-            font-size: 2.4rem;
-            margin: 0 0 25px 0;
-        }
-
-        .sentence-box { margin-bottom: 25px; }
-        .sentence-box:last-child { margin-bottom: 0; }
-
-        .label {
-            display: block;
-            color: var(--text-labels);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .content {
-            display: block;
-            font-size: 1.4rem;
-            line-height: 1.7;
-            color: var(--text-content); /* يتكيف تلقائياً */
-        }
-
-        /* زر التبديل */
-        .theme-toggle {
-            background: var(--bg-card);
-            border: 1px solid #ddd;
-            padding: 10px 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            color: var(--text-content);
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-
-        footer {
             padding: 30px;
-            font-size: 0.85rem;
-            color: var(--footer-color);
-            text-align: center;
-            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            border-right: 8px solid var(--text-word);
+            animation: slideUp 0.4s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .result-card h2 { color: var(--text-word); font-size: 2.2rem; margin: 0 0 20px 0; }
+        .sentence-box { margin-bottom: 20px; }
+        .label { display: block; color: var(--text-labels); font-weight: bold; margin-bottom: 5px; }
+        .content { font-size: 1.3rem; line-height: 1.6; }
 
-        /* لودر التحميل */
+        /* Spinner */
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--text-word);
-            border-radius: 50%;
+            display: none;
             width: 30px;
             height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--text-word);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
-            display: none;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text-content);
+        }
+
+        footer { padding: 20px; font-size: 0.8rem; color: var(--footer-color); text-align: center; }
     </style>
 </head>
 <body>
@@ -181,9 +166,10 @@
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">الوضع الليلي</button>
     </div>
 
-    <div class="search-row">
-        <input type="text" id="wordInput" placeholder="أدخل الكلمة للبحث..." autocomplete="off">
+    <div class="search-container">
+        <input type="text" id="wordInput" placeholder="ابحث عن كلمة..." autocomplete="off">
         <button id="searchBtn" onclick="handleSearch()">بحث</button>
+        <div id="dropdownMenu" class="dropdown-menu"></div>
     </div>
 
     <div id="loader" class="loader"></div>
@@ -191,80 +177,124 @@
 </div>
 
 <footer>
-    سياسة الخصوصية: هذا التطبيق لا يقوم بجمع أي بيانات شخصية، يتم جلب المعلومات عبر بوابة API خاصة بجدول بيانات المستخدم.
+    سياسة الخصوصية: التطبيق يحفظ سجل بحثك محلياً على جهازك فقط ولا يجمع بيانات شخصية.
 </footer>
 
 <script>
-    // الرابط المشفر قليلاً لزيادة الأمان
-    const _GATEWAY = "https://script.google.com/macros/s/AKfycbygwyQ2dzlbcci3yG2_jwlnb1EqlBYLJsTWATqkORaL5vxvu4fctYEdhZzXHg5OOxe_/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwRF6ZycN-hWpqWu2LW3LaU3Bgf7mQhJeORX6xKiXJ0EKInKU6weTgfZYrANBDt6Lnc/exec";
+    const input = document.getElementById('wordInput');
+    const dropdown = document.getElementById('dropdownMenu');
+    const resultArea = document.getElementById('resultArea');
+    const loader = document.getElementById('loader');
 
+    // --- سجل البحث (LocalStorage) ---
+    function getHistory() {
+        return JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    }
+
+    function addToHistory(word) {
+        let history = getHistory().filter(w => w !== word);
+        history.unshift(word);
+        localStorage.setItem('searchHistory', JSON.stringify(history.slice(0, 7)));
+    }
+
+    // --- عرض القائمة المنسدلة ---
+    input.addEventListener('focus', () => {
+        if (!input.value.trim()) showHistory();
+    });
+
+    input.addEventListener('input', async () => {
+        const val = input.value.trim();
+        if (val.length < 2) {
+            dropdown.style.display = val.length === 0 ? 'block' : 'none';
+            if (val.length === 0) showHistory();
+            return;
+        }
+        
+        // جلب الاقتراحات من API
+        try {
+            const res = await fetch(`${API_URL}?suggest=${encodeURIComponent(val)}`);
+            const suggestions = await res.json();
+            renderDropdown(suggestions, 'suggest-item');
+        } catch (e) { console.error("Suggest error"); }
+    });
+
+    function showHistory() {
+        const history = getHistory();
+        if (history.length > 0) renderDropdown(history, 'history-item');
+        else dropdown.style.display = 'none';
+    }
+
+    function renderDropdown(items, className) {
+        dropdown.innerHTML = '';
+        if (items.length === 0) { dropdown.style.display = 'none'; return; }
+        
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = `dropdown-item ${className}`;
+            div.textContent = item;
+            div.onclick = () => {
+                input.value = item;
+                dropdown.style.display = 'none';
+                handleSearch();
+            };
+            dropdown.appendChild(div);
+        });
+        dropdown.style.display = 'block';
+    }
+
+    // --- عملية البحث الكاملة ---
     async function handleSearch() {
-        const input = document.getElementById('wordInput');
         const query = input.value.trim();
-        const resultArea = document.getElementById('resultArea');
-        const loader = document.getElementById('loader');
-        const btn = document.getElementById('searchBtn');
-
         if (!query) return;
 
-        // تجهيز الواجهة للتحميل
+        dropdown.style.display = 'none';
         resultArea.innerHTML = '';
         loader.style.display = 'block';
-        btn.disabled = true;
 
         try {
-            // إرسال الطلب بنظام الـ Parameters كما طلبت
-            const response = await fetch(`${_GATEWAY}?q=${encodeURIComponent(query)}`);
-            const data = await response.json();
-
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
             loader.style.display = 'none';
-            btn.disabled = false;
 
             if (data.found) {
-                renderResult(data);
+                addToHistory(data.word);
+                resultArea.innerHTML = `
+                    <div class="result-card">
+                        <h2>${data.word}</h2>
+                        <div class="sentence-box">
+                            <span class="label">الجملة الأولى:</span>
+                            <span class="content">${data.sentence1 || ''}</span>
+                        </div>
+                        <div class="sentence-box">
+                            <span class="label">الجملة الثانية:</span>
+                            <span class="content">${data.sentence2 || ''}</span>
+                        </div>
+                    </div>
+                `;
             } else {
-                resultArea.innerHTML = `<p style="text-align:center; opacity:0.7; font-size:1.2rem;">عذراً، الكلمة "${query}" غير موجودة في قاعدتنا.</p>`;
+                resultArea.innerHTML = `<p style="text-align:center; opacity:0.6;">الكلمة غير موجودة</p>`;
             }
-        } catch (error) {
+        } catch (e) {
             loader.style.display = 'none';
-            btn.disabled = false;
-            resultArea.innerHTML = `<p style="color:#ef4444; text-align:center;">حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة لاحقاً.</p>`;
-            console.error("API Error:", error);
+            resultArea.innerHTML = `<p style="color:red; text-align:center;">خطأ في الاتصال</p>`;
         }
     }
 
-    function renderResult(data) {
-        const resultArea = document.getElementById('resultArea');
-        resultArea.innerHTML = `
-            <div class="result-card">
-                <h2>${data.word}</h2>
-                <div class="sentence-box">
-                    <span class="label">الجملة الأولى:</span>
-                    <span class="content">${data.sentence1 || '---'}</span>
-                </div>
-                <div class="sentence-box">
-                    <span class="label">الجملة الثانية:</span>
-                    <span class="content">${data.sentence2 || '---'}</span>
-                </div>
-            </div>
-        `;
-    }
+    // إغلاق القائمة عند الضغط خارجها
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-container')) dropdown.style.display = 'none';
+    });
 
     function toggleTheme() {
         const html = document.documentElement;
-        const btn = document.getElementById('themeBtn');
         const isDark = html.getAttribute('data-theme') === 'dark';
-        
         html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        btn.innerText = isDark ? "الوضع الليلي" : "الوضع النهاري";
+        document.getElementById('themeBtn').innerText = isDark ? "الوضع الليلي" : "الوضع النهاري";
     }
 
-    // دعم البحث عند ضغط Enter
-    document.getElementById('wordInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
 </script>
 
 </body>
-        </html>
-            
+</html>
