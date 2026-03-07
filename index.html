@@ -15,9 +15,9 @@
             --input-bg: #f8fafc; 
             --input-border: #e2e8f0; 
             --btn-green: #2ecc71; /* لون زر البحث الأخضر */
-            --btn-blue: #3b82f6; 
-            --theme-btn-bg: #3b82f6; /* لون زر الأوضاع الأزرق */
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --theme-btn-border: #000000;
+            --theme-btn-text: #000000;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         [data-theme="dark"] {
@@ -26,106 +26,86 @@
             --text-word: #2ecc71;
             --text-labels: #4ade80;
             --text-content: #f8fafc;
-            --input-bg: #334155; /* الحفاظ على لون الشريط الداكن */
+            --input-bg: #334155; 
             --input-border: #475569;
-            --theme-btn-bg: #3b82f6;
-            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --theme-btn-border: #ffffff;
+            --theme-btn-text: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-
-        html, body { height: 100%; margin: 0; padding: 0; }
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-content);
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
             direction: rtl;
             transition: background 0.3s;
         }
 
         .app-container {
-            width: 90%;
+            width: 95%;
             max-width: 600px;
             padding: 40px 0;
-            flex: 1 0 auto;
-            display: flex;
-            flex-direction: column;
+            flex-grow: 1;
         }
 
-        /* --- Header: العنوان يمين والزر أقصى اليسار --- */
+        /* محاذاة العنوان والزر: العنوان يمين والزر أقصى اليسار */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .header h1 {
-            font-size: 2.2rem;
-            margin: 0;
-        }
-
-        /* زر الأوضاع: أزرق، مستطيل بحواف ناعمة، في اليسار */
+        /* إعادة زر الأوضاع لشكلة الأصلي (كبسولة بحدود) */
         #themeBtn {
-            background: var(--theme-btn-bg);
-            border: none;
-            padding: 10px 22px;
-            border-radius: 10px;
+            background: transparent;
+            border: 1px solid var(--theme-btn-border);
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
-            color: #ffffff;
-            font-size: 0.95rem;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s;
+            color: var(--theme-btn-text);
         }
 
-        /* --- حاوية البحث: توحيد الأحجام والترتيب الأوفقي --- */
+        /* تنسيق شريط البحث وزر البحث */
         .search-container {
             display: flex;
-            flex-direction: row; 
-            gap: 12px;
-            width: 100%;
-            margin-bottom: 25px;
-            height: 55px; /* توحيد الارتفاع تماماً */
+            gap: 10px;
+            margin-bottom: 20px;
+            height: 55px; /* توحيد الطول لضمان التناسق */
             align-items: stretch;
         }
 
         input#wordInput {
             flex: 1;
-            box-sizing: border-box;
-            height: 100%;
             padding: 0 20px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid var(--input-border);
             background: var(--input-bg);
             color: var(--text-content);
             outline: none;
-            font-size: 1.1rem;
             box-shadow: var(--shadow);
+            font-size: 1.1rem;
         }
 
-        /* زر بحث: أخضر كما في الصورة */
+        /* الاحتفاظ بزر البحث الأخضر وبنفس طول الشريط */
         #searchBtn {
-            box-sizing: border-box;
-            height: 100%;
             padding: 0 30px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: none;
             background: var(--btn-green);
             color: white;
             font-weight: bold;
-            font-size: 1.05rem;
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: transform 0.2s;
         }
 
-        #searchBtn:active { transform: scale(0.96); }
-
-        /* لودر حرف الضاد */
+        /* اللودر (حرف الضاد) */
         .loader-wrapper {
             display: none;
             text-align: center;
@@ -145,13 +125,12 @@
             100% { transform: scale(1); opacity: 0.4; }
         }
 
-        /* البطاقة */
         .result-card {
             background: var(--bg-card);
             padding: 30px;
             border-radius: 20px;
             box-shadow: var(--shadow);
-            margin-top: 10px;
+            margin-top: 20px;
             border-right: 10px solid var(--text-word);
             animation: slideUp 0.4s ease;
         }
@@ -161,13 +140,12 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* التذييل */
-        .footer-suggest { flex-shrink: 0; padding: 40px 0; text-align: center; width: 100%; }
-        .suggest-link { color: var(--btn-blue); text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .footer-suggest { margin-top: auto; padding: 40px 0; text-align: center; width: 100%; }
+        .suggest-link { color: #3b82f6; text-decoration: underline; cursor: pointer; font-weight: bold; }
         .hidden-panel {
-            display: none; margin: 15px auto 0; padding: 20px; background: var(--bg-card);
+            display: none; margin-top: 15px; padding: 20px; background: var(--bg-card);
             border-radius: 15px; box-shadow: var(--shadow); border: 1px solid var(--input-border);
-            position: relative; max-width: 450px; width: 90%; box-sizing: border-box;
+            position: relative; max-width: 450px; margin-left: auto; margin-right: auto;
         }
         .close-suggest { position: absolute; top: 5px; left: 10px; cursor: pointer; color: #ff4d4d; font-weight: bold; }
         .suggest-box { display: flex; gap: 8px; margin-top: 10px; }
@@ -179,7 +157,7 @@
 <div class="app-container">
     <div class="header">
         <h1>معاني الكلمات</h1>
-        <button onclick="toggleTheme()" id="themeBtn">الوضع الليلي</button>
+        <button onclick="toggleTheme()" id="themeBtn">الوضع المظلم</button>
     </div>
 
     <div class="search-container">
@@ -201,7 +179,7 @@
         <span class="close-suggest" onclick="hideSuggestPanel()">✕</span>
         <div class="suggest-box">
             <input type="text" id="newWordInput" class="suggest-input" placeholder="اكتب الكلمة هنا...">
-            <button onclick="sendNewWord()" style="background: var(--btn-blue); color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
+            <button onclick="sendNewWord()" style="background: #3b82f6; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
         </div>
     </div>
 </div>
@@ -212,7 +190,7 @@
     function applySavedTheme() {
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع النهاري" : "الوضع الليلي";
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
     }
 
     function toggleTheme() {
@@ -220,7 +198,7 @@
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع الليلي";
+        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
     }
 
     function showSuggestPanel() {
@@ -248,16 +226,9 @@
             const data = await res.json();
             loader.style.display = 'none';
             if (data.found) {
-                resArea.innerHTML = `
-                    <div class="result-card">
-                        <h2>${data.word}</h2>
-                        <span class="label">الجملة الأولى:</span>
-                        <span class="content">${data.sentence1}</span>
-                        <span class="label">الجملة الثانية:</span>
-                        <span class="content">${data.sentence2}</span>
-                    </div>`;
+                resArea.innerHTML = `<div class="result-card"><h2>${data.word}</h2><span class="label">الجملة الأولى:</span><span class="content">${data.sentence1}</span><span class="label">الجملة الثانية:</span><span class="content">${data.sentence2}</span></div>`;
             } else {
-                resArea.innerHTML = '<p style="text-align:center; opacity:0.6; margin-top:20px;">الكلمة غير موجودة حالياً.</p>';
+                resArea.innerHTML = '<p style="text-align:center; opacity:0.6; margin-top:20px;">الكلمة غير موجودة.</p>';
             }
         } catch (e) {
             loader.style.display = 'none';
@@ -274,7 +245,7 @@
         const formData = new FormData();
         formData.append(entryID, word);
         fetch(formURL, { method: "POST", mode: "no-cors", body: formData });
-        document.getElementById('footerArea').innerHTML = '<div style="color: var(--text-labels); font-weight: bold; padding: 20px;">شكراً لمساهمتك! ❤️</div>';
+        document.getElementById('footerArea').innerHTML = '<div style="color: var(--text-labels); font-weight: bold; padding: 20px;">شكراً! ❤️</div>';
     }
 
     applySavedTheme();
