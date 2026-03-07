@@ -6,26 +6,27 @@
     <title>معاني الكلمات</title>
     <style>
         :root {
-            --bg-body: #f8fafc;
+            --bg-body: #f1f5f9; 
             --bg-card: #ffffff;
             --text-word: #2ecc71;
             --text-labels: #27ae60;
             --text-content: #1a1a1a;
-            --input-bg: #ffffff;
-            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --input-bg: #ffffff; 
+            --input-border: #cbd5e1; 
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
             --footer-color: #94a3b8;
         }
 
-        /* تعديل ألوان الوضع المظلم لتكون أزرق ليلي مريح */
         [data-theme="dark"] {
-            --bg-body: #1e293b; /* أزرق ليلي عميق بدل الأسود */
-            --bg-card: #334155; /* درجة أفتح قليلاً للبطاقات */
-            --text-word: #4ade80;
-            --text-labels: #a7f3d0;
-            --text-content: #f1f5f9;
-            --input-bg: #475569;
-            --shadow: 0 10px 30px rgba(0,0,0,0.3);
-            --footer-color: #94a3b8;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-word: #2ecc71;
+            --text-labels: #4ade80;
+            --text-content: #f8fafc;
+            --input-bg: #ffffff; 
+            --input-border: transparent;
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --footer-color: #64748b;
         }
 
         body {
@@ -33,60 +34,112 @@
             background-color: var(--bg-body);
             color: var(--text-content);
             margin: 0;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; direction: rtl; transition: background 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+            transition: background 0.3s;
         }
 
-        .app-container { width: 95%; max-width: 600px; padding: 40px 0; flex-grow: 1; }
+        .app-container {
+            width: 95%;
+            max-width: 600px;
+            padding: 40px 0;
+            flex-grow: 1;
+        }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-        .search-container { position: relative; display: flex; gap: 10px; margin-bottom: 5px; }
+        .search-container {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
 
         input#wordInput {
-            flex: 1; padding: 16px 20px; border-radius: 14px; border: 2px solid transparent;
-            font-size: 1.1rem; background: var(--input-bg); color: var(--text-content);
-            outline: none; box-shadow: var(--shadow); transition: 0.3s;
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 2px solid var(--input-border);
+            font-size: 1.1rem;
+            background: var(--input-bg);
+            color: #000000; 
+            outline: none;
+            box-shadow: var(--shadow);
         }
 
         button#searchBtn {
-            padding: 0 25px; border-radius: 14px; border: none;
-            background: var(--text-word); color: white; font-weight: bold; cursor: pointer;
+            padding: 0 25px;
+            border-radius: 14px;
+            border: none;
+            background: var(--text-word);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--shadow);
         }
 
         .dropdown-menu {
-            position: absolute; top: 100%; right: 0; left: 0;
-            background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow);
-            z-index: 1000; margin-top: 8px; display: none; max-height: 250px; overflow-y: auto;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            margin-top: 8px;
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
         }
 
         .dropdown-item {
-            padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #1a1a1a;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: right;
         }
 
-        .dropdown-item:hover { background: rgba(46, 204, 113, 0.2); color: var(--text-word); }
+        .dropdown-item:hover { background: #f8fafc; color: var(--text-word); }
 
         .result-card {
-            background: var(--bg-card); padding: 30px; border-radius: 20px;
-            box-shadow: var(--shadow); margin-top: 30px; border-right: 8px solid var(--text-word);
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            border-right: 8px solid var(--text-word);
             animation: fadeIn 0.4s ease;
         }
 
         .result-card h2 { color: var(--text-word); font-size: 2.2rem; margin: 0 0 20px 0; }
+        .sentence-box { margin-bottom: 25px; }
         .label { display: block; color: var(--text-labels); font-weight: bold; margin-bottom: 5px; }
         .content { font-size: 1.4rem; line-height: 1.7; display: block; }
 
         .loader {
-            display: none; width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.2);
-            border-top: 3px solid var(--text-word); border-radius: 50%;
-            animation: spin 1s linear infinite; margin: 20px auto;
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--text-word);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        footer { padding: 20px; font-size: 0.8rem; color: var(--footer-color); text-align: center; }
     </style>
 </head>
 <body>
@@ -106,10 +159,6 @@
     <div id="loader" class="loader"></div>
     <div id="resultArea"></div>
 </div>
-
-<footer>
-    سياسة الخصوصية: هذا التطبيق لا يقوم بجمع أي بيانات شخصية، ويستخدم Google Sheets لعرض المحتوى فقط.
-</footer>
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwRF6ZycN-hWpqWu2LW3LaU3Bgf7mQhJeORX6xKiXJ0EKInKU6weTgfZYrANBDt6Lnc/exec";
@@ -132,8 +181,6 @@
         document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع الفاتح" : "الوضع المظلم";
     }
 
-    function closeDropdown() { dropdown.style.display = 'none'; dropdown.innerHTML = ''; }
-
     function getHistory() { return JSON.parse(localStorage.getItem('searchHistory') || '[]'); }
 
     function addToHistory(word) {
@@ -142,17 +189,25 @@
         localStorage.setItem('searchHistory', JSON.stringify(history.slice(0, 7)));
     }
 
-    input.addEventListener('focus', () => { if (!input.value.trim()) showHistory(); });
+    function closeDropdown() {
+        dropdown.style.display = 'none';
+        dropdown.innerHTML = '';
+    }
+
+    input.addEventListener('focus', () => {
+        if (!input.value.trim()) showHistory();
+    });
 
     input.addEventListener('input', async () => {
         const val = input.value.trim().toLowerCase();
         if (!val) { showHistory(); return; }
         if (val.length < 2) { closeDropdown(); return; }
+
         try {
             const res = await fetch(`${API_URL}?suggest=${encodeURIComponent(val)}`);
             const suggestions = await res.json();
             renderDropdown(suggestions, 'suggest-item');
-        } catch (e) { console.error("API error"); }
+        } catch (e) { console.error("API Error"); }
     });
 
     function showHistory() {
@@ -164,10 +219,11 @@
     function renderDropdown(items, className) {
         dropdown.innerHTML = '';
         if (items.length === 0) { closeDropdown(); return; }
+        
         items.forEach(item => {
             const div = document.createElement('div');
             div.className = `dropdown-item ${className}`;
-            div.innerText = item;
+            div.innerHTML = `<span>${item}</span>`;
             div.addEventListener('mousedown', (e) => { e.preventDefault(); });
             div.addEventListener('click', () => {
                 input.value = item;
@@ -182,14 +238,17 @@
     async function handleSearch() {
         const query = input.value.trim();
         if (!query) return;
+
         closeDropdown();
         input.blur();
         resultArea.innerHTML = ''; 
         loader.style.display = 'block';
+
         try {
             const res = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
             const data = await res.json();
             loader.style.display = 'none';
+
             if (data.found) {
                 addToHistory(data.word);
                 resultArea.innerHTML = `
@@ -210,13 +269,19 @@
             }
         } catch (e) {
             loader.style.display = 'none';
-            resultArea.innerHTML = `<p style="color:red; text-align:center;">خطأ في الاتصال، حاول مجدداً.</p>`;
+            resultArea.innerHTML = `<p style="color:red; text-align:center;">حدث خطأ في الاتصال.</p>`;
         }
     }
 
     applySavedTheme();
-    document.addEventListener('click', (e) => { if (!e.target.closest('.search-container')) closeDropdown(); });
-    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-container')) closeDropdown();
+    });
+
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') { handleSearch(); }
+    });
 </script>
 </body>
 </html>
