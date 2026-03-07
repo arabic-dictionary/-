@@ -3,230 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قاموسي الشخصي المطور</title>
+    <title>معاني الكلمات</title>
     <style>
-        /* تعريف الألوان والمتغيرات المعدلة */
         :root {
-            --bg-color: #f0f4f8;
-            --container-bg: #ffffff;
-            --text-color: #2d3436;
-            --primary-color: #2ecc71; /* أخضر فاتح للعنوان */
-            --secondary-color: #00a8ff; /* أزرق مشرق للجمل */
-            --shadow: 0 10px 25px rgba(0,0,0,0.1);
-            --card-bg: #ffffff;
-            --input-bg: #ffffff;
+            --bg-body: #ffffff; 
+            --bg-card: #ffffff;
+            --text-word: #2ecc71;
+            --text-labels: #27ae60;
+            --text-content: #1a1a1a;
+            --input-bg: #f8fafc; 
+            --input-border: #e2e8f0; 
+            --btn-blue: #3b82f6; 
+            --theme-btn-text: #000000;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         [data-theme="dark"] {
-            --bg-color: #121212;
-            --container-bg: #1e1e1e;
-            --text-color: #f5f6fa;
-            --primary-color: #55efc4; /* أخضر أفتح للوضع الليلي */
-            --secondary-color: #48dbfb; /* أزرق مشرق جداً */
-            --card-bg: #2d2d2d;
-            --input-bg: #3d3d3d;
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-word: #2ecc71;
+            --text-labels: #4ade80;
+            --text-content: #f8fafc;
+            --input-bg: #ffffff; 
+            --input-border: transparent;
+            --theme-btn-text: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-content);
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            transition: background 0.3s ease;
-            direction: rtl; /* التأكد من اتجاه الصفحة بالكامل */
+            direction: rtl;
+            transition: background 0.3s;
         }
 
-        .container {
+        .app-container {
             width: 95%;
             max-width: 600px;
-            background: var(--container-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
+            padding: 40px 0;
+            flex-grow: 1;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        h1 { font-size: 1.8rem; margin: 0; }
-
-        .theme-toggle {
-            background: var(--primary-color);
-            border: none;
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 12px;
+        #themeBtn {
+            background: transparent;
+            border: 1px solid var(--theme-btn-text);
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
+            color: var(--theme-btn-text);
         }
 
-        /* حقل البحث */
-        .search-box {
+        .search-container {
+            position: relative;
             display: flex;
-            gap: 12px;
-            margin-bottom: 35px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        input {
-            flex: 2;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            background: var(--input-bg);
-            color: var(--text-color);
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
-
-        button#searchBtn {
+        input#wordInput {
             flex: 1;
-            padding: 15px;
-            background-color: var(--secondary-color);
-            color: white;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: #000;
+            outline: none;
+            box-shadow: var(--shadow);
+        }
+
+        #searchBtn {
+            padding: 0 25px;
+            border-radius: 14px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            background: var(--btn-blue);
+            color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
         }
 
-        button#searchBtn:active { transform: scale(0.95); }
+        /* --- حركة حرف الضاد الجديدة --- */
+        .loader-wrapper {
+            display: none;
+            text-align: center;
+            margin: 30px auto;
+        }
 
-        /* تنسيق الـ Card */
-        #resultArea { margin-top: 25px; }
+        .dad-loader {
+            font-size: 60px;
+            color: var(--text-word);
+            display: inline-block;
+            position: relative;
+            animation: pulseDad 1.5s ease-in-out infinite;
+            font-weight: bold;
+        }
 
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
+        @keyframes pulseDad {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 15px var(--text-word); }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* --- تنسيق البطاقة --- */
+        .result-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            border-right: 10px solid var(--text-word);
+            animation: slideUp 0.4s ease;
+        }
+
+        .result-card h2 { color: var(--text-word); font-size: 2.2rem; margin: 0 0 20px 0; }
+        .label { display: block; color: var(--text-labels); font-weight: bold; margin-bottom: 8px; }
+        .content { font-size: 1.4rem; line-height: 1.7; margin-bottom: 25px; display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- قسم الاقتراحات --- */
+        .footer-suggest { margin-top: auto; padding: 40px 0; text-align: center; }
+        .suggest-link { color: var(--btn-blue); text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .hidden-panel {
+            display: none;
+            margin-top: 15px;
+            padding: 20px;
+            background: var(--bg-card);
             border-radius: 15px;
             box-shadow: var(--shadow);
-            text-align: right; /* محاذاة لليمين */
-            border-right: 8px solid var(--primary-color);
-            animation: slideUp 0.4s ease-out;
+            border: 1px solid var(--input-border);
+            position: relative;
         }
-
-        .card h2 { 
-            margin-top: 0; 
-            color: var(--primary-color); 
-            font-size: 2rem; /* تكبير اسم الكلمة */
-            margin-bottom: 15px;
-        }
-
-        .card p { 
-            line-height: 1.8; 
-            margin: 12px 0; 
-            font-size: 1.2rem; /* تكبير خط الجمل */
-            color: var(--secondary-color); /* الجمل بالأزرق المشرق */
-            font-weight: 500;
-        }
-
-        .error { color: #ff7675; font-size: 1.1rem; font-weight: bold; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* الموبايل */
-        @media (max-width: 480px) {
-            .search-box { flex-direction: column; }
-            h1 { font-size: 1.4rem; }
-        }
+        .close-suggest { position: absolute; top: 5px; left: 10px; cursor: pointer; color: #ff4d4d; font-weight: bold; }
+        .suggest-box { display: flex; gap: 8px; margin-top: 10px; }
+        .suggest-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--input-border); outline: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
     <div class="header">
-        <h1>قاموسي الشخصي</h1>
-        <button class="theme-toggle" id="themeBtn">الوضع الليلي</button>
+        <h1>معاني الكلمات</h1>
+        <button onclick="toggleTheme()" id="themeBtn">الوضع المظلم</button>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ابحث عن كلمة...">
-        <button id="searchBtn">بحث</button>
+    <div class="search-container">
+        <input type="text" id="wordInput" placeholder="أكتب كلمة..." autocomplete="off" onkeydown="if(event.key==='Enter') handleSearch()">
+        <button id="searchBtn" onclick="handleSearch()">بحث</button>
     </div>
 
-    <div id="resultArea">
+    <div id="loader" class="loader-wrapper">
+        <div class="dad-loader">ض</div>
+        <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.6;">جاري استخراج المعنى...</p>
+    </div>
+
+    <div id="resultArea"></div>
+
+    <div class="footer-suggest" id="footerArea">
+        <span class="suggest-link" id="toggleLink" onclick="showSuggestPanel()">هل لديك كلمة جديدة؟</span>
+        
+        <div class="hidden-panel" id="suggestPanel">
+            <span class="close-suggest" onclick="hideSuggestPanel()">✕</span>
+            <div class="suggest-box">
+                <input type="text" id="newWordInput" class="suggest-input" placeholder="اكتب الكلمة هنا...">
+                <button onclick="sendNewWord()" style="background: var(--btn-blue); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
+            </div>
         </div>
+    </div>
 </div>
 
 <script>
-    const sheetId = '1DLTYDgoPf_OPMi-vjp6Fx7JJN4_PNdRrBT8vMICrc1Q';
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+    const API_URL = "https://script.google.com/macros/s/AKfycbwRF6ZycN-hWpqWu2LW3LaU3Bgf7mQhJeORX6xKiXJ0EKInKU6weTgfZYrANBDt6Lnc/exec";
 
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const resultArea = document.getElementById('resultArea');
-    const themeBtn = document.getElementById('themeBtn');
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع الفاتح" : "الوضع المظلم";
+    }
 
-    // تبديل الثيم
-    themeBtn.addEventListener('click', () => {
+    function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            themeBtn.innerText = 'الوضع الليلي';
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeBtn.innerText = 'الوضع النهاري';
-        }
-    });
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع الفاتح" : "الوضع المظلم";
+    }
 
-    async function searchWord() {
-        const query = searchInput.value.trim().toLowerCase();
+    function showSuggestPanel() {
+        document.getElementById('toggleLink').style.display = 'none';
+        document.getElementById('suggestPanel').style.display = 'block';
+    }
+
+    function hideSuggestPanel() {
+        document.getElementById('toggleLink').style.display = 'inline';
+        document.getElementById('suggestPanel').style.display = 'none';
+    }
+
+    async function handleSearch() {
+        const input = document.getElementById('wordInput');
+        const resArea = document.getElementById('resultArea');
+        const loader = document.getElementById('loader');
+        const query = input.value.trim();
+
         if (!query) return;
-
-        resultArea.innerHTML = '<p>جاري البحث عن الكلمة...</p>';
+        
+        resArea.innerHTML = '';
+        loader.style.display = 'block';
 
         try {
-            const response = await fetch(csvUrl);
-            const data = await response.text();
-            
-            // تقسيم الأسطر مع مراعاة الفواصل
-            const rows = data.split('\n').map(row => row.split(','));
-            
-            // البحث (العمود الأول للكلمة)
-            const foundRow = rows.find(row => row[0] && row[0].trim().toLowerCase() === query);
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            loader.style.display = 'none';
 
-            if (foundRow) {
-                // عرض النتيجة بالتنسيق الجديد
-                resultArea.innerHTML = `
-                    <div class="card">
-                        <h2>${foundRow[0]}</h2>
-                        <p>${foundRow[1] || ''}</p>
-                        <p>${foundRow[2] || ''}</p>
-                    </div>
-                `;
+            if (data.found) {
+                resArea.innerHTML = `
+                    <div class="result-card">
+                        <h2>${data.word}</h2>
+                        <span class="label">الجملة الأولى:</span>
+                        <span class="content">${data.sentence1}</span>
+                        <span class="label">الجملة الثانية:</span>
+                        <span class="content">${data.sentence2}</span>
+                    </div>`;
             } else {
-                resultArea.innerHTML = '<p class="error">الكلمة غير موجودة في قاعدتنا</p>';
+                resArea.innerHTML = '<p style="text-align:center; opacity:0.6;">الكلمة غير موجودة.</p>';
             }
-        } catch (error) {
-            resultArea.innerHTML = '<p class="error">عذراً، فشل الاتصال بقاعدة البيانات</p>';
+        } catch (e) {
+            loader.style.display = 'none';
+            resArea.innerHTML = '<p style="color:red; text-align:center;">خطأ في الاتصال.</p>';
         }
     }
 
-    searchBtn.addEventListener('click', searchWord);
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchWord();
-    });
-</script>
+    async function sendNewWord() {
+        const wordInput = document.getElementById('newWordInput');
+        const word = wordInput.value.trim();
+        if (!word) return;
+        
+        const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+        const entryID = "entry.123456789";
 
+        const formData = new FormData();
+        formData.append(entryID, word);
+
+        fetch(formURL, { method: "POST", mode: "no-cors", body: formData });
+        
+        document.getElementById('footerArea').innerHTML = `
+            <div style="color: var(--text-labels); font-weight: bold; padding: 20px;">
+                شكراً لك على مساعدة في تطوير موقعنا. ❤️
+            </div>`;
+    }
+
+    applySavedTheme();
+</script>
 </body>
-    </html>
+</html>
