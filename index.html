@@ -59,7 +59,7 @@
             margin-bottom: 30px;
         }
 
-        /* زر الوضع النهاري/الليلي الشفاف بحدود */
+        /* تنسيق زر الوضع الشفاف بحدود كما في الصورة */
         #themeBtn {
             background: transparent;
             border: 1px solid var(--theme-btn-text);
@@ -99,31 +99,14 @@
             cursor: pointer;
         }
 
-        /* الـ Loader الذي أرسلته مع تعديل اللون للأخضر */
-        .loader {
-            display: none; 
-            width: 45px;
-            height: 45px;
-            border: 5px solid rgba(0,0,0,0.1);
-            border-top: 5px solid var(--text-word);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 30px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* تنسيق البطاقة المعتمد من الصور */
+        /* تنسيق البطاقة بالحافة الخضراء العريضة */
         .result-card {
             background: var(--bg-card);
             padding: 30px;
             border-radius: 20px;
             box-shadow: var(--shadow);
             margin-top: 20px;
-            border-right: 10px solid var(--text-word); 
+            border-right: 10px solid var(--text-word);
             animation: fadeIn 0.4s ease;
         }
 
@@ -131,7 +114,22 @@
         .label { display: block; color: var(--text-labels); font-weight: bold; margin-bottom: 8px; font-size: 1.1rem; }
         .content { font-size: 1.4rem; line-height: 1.7; margin-bottom: 25px; display: block; }
 
-        /* قسم الاقتراحات */
+        /* استخراج جزء الـ Loader المطلوب من كودك القديم */
+        .loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--text-word);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* قسم الاقتراحات الأسفل مع زر X */
         .footer-suggest {
             margin-top: auto;
             padding: 40px 0;
@@ -154,24 +152,19 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--input-border);
             position: relative;
-            animation: slideUp 0.3s ease-out;
         }
 
         .close-suggest {
             position: absolute;
             top: 5px;
-            left: 12px;
+            left: 10px;
             cursor: pointer;
-            font-size: 1.3rem;
             color: #ff4d4d;
             font-weight: bold;
         }
 
         .suggest-box { display: flex; gap: 8px; margin-top: 10px; }
-        .suggest-input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: #000; outline: none; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .suggest-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: #000; outline: none; }
     </style>
 </head>
 <body>
@@ -188,7 +181,6 @@
     </div>
 
     <div id="loader" class="loader"></div>
-    
     <div id="resultArea"></div>
 
     <div class="footer-suggest" id="footerArea">
@@ -196,10 +188,10 @@
         
         <div class="hidden-panel" id="suggestPanel">
             <span class="close-suggest" onclick="hideSuggestPanel()">✕</span>
-            <p style="font-size: 0.9rem; margin-bottom: 10px; opacity: 0.8;">ساعدنا في تطوير الموقع</p>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">ساعدنا في تطوير الموقع</p>
             <div class="suggest-box">
                 <input type="text" id="newWordInput" class="suggest-input" placeholder="اكتب الكلمة هنا...">
-                <button onclick="sendNewWord()" id="sendBtn" style="background: var(--btn-blue); color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
+                <button onclick="sendNewWord()" style="background: var(--btn-blue); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
             </div>
         </div>
     </div>
@@ -207,11 +199,14 @@
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwRF6ZycN-hWpqWu2LW3LaU3Bgf7mQhJeORX6xKiXJ0EKInKU6weTgfZYrANBDt6Lnc/exec";
+    const input = document.getElementById('wordInput');
+    const resultArea = document.getElementById('resultArea');
+    const loader = document.getElementById('loader');
 
     function applySavedTheme() {
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع الفاتح" : "الوضع المظلم";
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
     }
 
     function toggleTheme() {
@@ -219,8 +214,15 @@
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع الفاتح" : "الوضع المظلم";
+        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
     }
+
+    // تفعيل زر Enter للبحث
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    });
 
     function showSuggestPanel() {
         document.getElementById('toggleLink').style.display = 'none';
@@ -233,35 +235,33 @@
     }
 
     async function handleSearch() {
-        const input = document.getElementById('wordInput');
-        const resArea = document.getElementById('resultArea');
-        const loader = document.getElementById('loader');
-        
-        if (!input.value.trim()) return;
-        
-        resArea.innerHTML = '';
-        loader.style.display = 'block'; // إظهار الـ Loader الخاص بك
+        const query = input.value.trim();
+        if (!query) return;
+
+        input.blur(); // إغلاق لوحة مفاتيح الهاتف
+        resultArea.innerHTML = ''; 
+        loader.style.display = 'block';
 
         try {
-            const res = await fetch(`${API_URL}?q=${encodeURIComponent(input.value.trim())}`);
+            const res = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
             const data = await res.json();
-            loader.style.display = 'none'; // إخفاء الـ Loader
+            loader.style.display = 'none';
 
             if (data.found) {
-                resArea.innerHTML = `
+                resultArea.innerHTML = `
                     <div class="result-card">
                         <h2>${data.word}</h2>
                         <span class="label">الجملة الأولى:</span>
-                        <span class="content">${data.sentence1}</span>
+                        <span class="content">${data.sentence1 || ''}</span>
                         <span class="label">الجملة الثانية:</span>
-                        <span class="content">${data.sentence2}</span>
+                        <span class="content">${data.sentence2 || ''}</span>
                     </div>`;
             } else {
-                resArea.innerHTML = '<p style="text-align:center; padding:20px; opacity:0.6;">الكلمة غير موجودة حالياً.</p>';
+                resultArea.innerHTML = `<p style="text-align:center; opacity:0.6;">الكلمة غير موجودة حالياً.</p>`;
             }
         } catch (e) {
             loader.style.display = 'none';
-            resArea.innerHTML = '<p style="color:red; text-align:center; padding:20px;">خطأ في الاتصال بالقاعدة.</p>';
+            resultArea.innerHTML = `<p style="color:red; text-align:center;">خطأ في الاتصال.</p>`;
         }
     }
 
@@ -269,7 +269,7 @@
         const wordInput = document.getElementById('newWordInput');
         const word = wordInput.value.trim();
         if (!word) return;
-        
+
         const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
         const entryID = "entry.123456789";
 
@@ -279,17 +279,12 @@
         fetch(formURL, { method: "POST", mode: "no-cors", body: formData });
         
         document.getElementById('footerArea').innerHTML = `
-            <div style="color: var(--text-labels); font-weight: bold; animation: fadeIn 0.5s; padding: 20px;">
+            <div style="color: var(--text-labels); font-weight: bold; padding: 20px;">
                 شكراً لك على مساعدة في تطوير موقعنا. ❤️
             </div>`;
     }
 
     applySavedTheme();
-
-    // تشغيل البحث عند الضغط على Enter
-    document.getElementById('wordInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
 </script>
 </body>
 </html>
