@@ -14,28 +14,25 @@
             --text-content: #1a1a1a;
             --input-bg: #f8fafc; 
             --input-border: #e2e8f0; 
-            --btn-green: #2ecc71; /* لون الزر الأخضر كما في الصورة */
+            --btn-green: #2ecc71; /* لون زر البحث الأخضر */
             --btn-blue: #3b82f6; 
-            --theme-btn-border: #1a1a1a;
-            --theme-btn-text: #1a1a1a;
+            --theme-btn-bg: #3b82f6; /* لون زر الأوضاع الأزرق */
             --shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         [data-theme="dark"] {
-            --bg-body: #0f172a; /* لون الخلفية الداكن */
+            --bg-body: #0f172a;
             --bg-card: #1e293b;
             --text-word: #2ecc71;
             --text-labels: #4ade80;
             --text-content: #f8fafc;
-            --input-bg: #334155; /* لون الشريط الداكن كما في الصورة */
-            --input-border: #64748b;
-            --btn-green: #2ecc71; 
-            --theme-btn-border: #ffffff;
-            --theme-btn-text: #ffffff;
+            --input-bg: #334155; /* الحفاظ على لون الشريط الداكن */
+            --input-border: #475569;
+            --theme-btn-bg: #3b82f6;
             --shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        html, body { height: 100%; margin: 0; }
+        html, body { height: 100%; margin: 0; padding: 0; }
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -57,7 +54,7 @@
             flex-direction: column;
         }
 
-        /* --- تنسيق الـ Header (زر الوضع والعنوان) --- */
+        /* --- Header: العنوان يمين والزر أقصى اليسار --- */
         .header {
             display: flex;
             justify-content: space-between;
@@ -71,69 +68,64 @@
             margin: 0;
         }
 
+        /* زر الأوضاع: أزرق، مستطيل بحواف ناعمة، في اليسار */
         #themeBtn {
-            background: transparent;
-            border: 1px solid var(--theme-btn-border);
-            padding: 8px 20px;
-            border-radius: 50px; /* شكل الكبسولة */
+            background: var(--theme-btn-bg);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 500;
-            color: var(--theme-btn-text);
-            font-size: 0.9rem;
-            white-space: nowrap; /* يمنع نزول النص لسطرين */
-            transition: all 0.3s ease;
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
         }
 
-        /* --- تنسيق حاوية البحث (الشريط والزر) --- */
+        /* --- حاوية البحث: توحيد الأحجام والترتيب الأوفقي --- */
         .search-container {
             display: flex;
-            flex-direction: row; /* إجبار العناصر لتكون بجانب بعضها */
-            gap: 15px;
+            flex-direction: row; 
+            gap: 12px;
             width: 100%;
-            margin-bottom: 20px;
-            align-items: stretch; /* لضمان تساوي الطول */
-            height: 55px; /* تثبيت الطول للزر والشريط معاً */
+            margin-bottom: 25px;
+            height: 55px; /* توحيد الارتفاع تماماً */
+            align-items: stretch;
         }
 
         input#wordInput {
-            flex: 1; /* يأخذ المساحة المتبقية */
-            box-sizing: border-box; /* لمنع الـ padding من زيادة الحجم */
-            height: 100%; /* يأخذ طول الحاوية 55px */
+            flex: 1;
+            box-sizing: border-box;
+            height: 100%;
             padding: 0 20px;
-            border-radius: 15px; /* انحناء الزوايا كما في الصورة */
+            border-radius: 12px;
             border: 1px solid var(--input-border);
             background: var(--input-bg);
             color: var(--text-content);
             outline: none;
             font-size: 1.1rem;
             box-shadow: var(--shadow);
-            margin: 0;
-            transition: all 0.3s;
         }
 
-        input#wordInput:focus {
-            border-color: var(--text-word);
-        }
-
+        /* زر بحث: أخضر كما في الصورة */
         #searchBtn {
             box-sizing: border-box;
-            height: 100%; /* يأخذ نفس طول الشريط 55px بالضبط */
-            padding: 0 35px;
+            height: 100%;
+            padding: 0 30px;
             border-radius: 12px;
             border: none;
-            background: var(--btn-green); /* اللون الأخضر */
+            background: var(--btn-green);
             color: white;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             cursor: pointer;
-            margin: 0;
-            transition: transform 0.2s;
             box-shadow: var(--shadow);
+            transition: transform 0.2s;
         }
 
-        #searchBtn:active { transform: scale(0.95); }
+        #searchBtn:active { transform: scale(0.96); }
 
-        /* --- اللودر (حرف الضاد) --- */
+        /* لودر حرف الضاد */
         .loader-wrapper {
             display: none;
             text-align: center;
@@ -153,13 +145,13 @@
             100% { transform: scale(1); opacity: 0.4; }
         }
 
-        /* --- البطاقة --- */
+        /* البطاقة */
         .result-card {
             background: var(--bg-card);
             padding: 30px;
             border-radius: 20px;
             box-shadow: var(--shadow);
-            margin-top: 20px;
+            margin-top: 10px;
             border-right: 10px solid var(--text-word);
             animation: slideUp 0.4s ease;
         }
@@ -169,19 +161,15 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- قسم الاقتراحات في الأسفل --- */
-        .footer-suggest { 
-            flex-shrink: 0; padding: 40px 0; text-align: center; width: 100%;
-        }
+        /* التذييل */
+        .footer-suggest { flex-shrink: 0; padding: 40px 0; text-align: center; width: 100%; }
         .suggest-link { color: var(--btn-blue); text-decoration: underline; cursor: pointer; font-weight: bold; }
         .hidden-panel {
             display: none; margin: 15px auto 0; padding: 20px; background: var(--bg-card);
             border-radius: 15px; box-shadow: var(--shadow); border: 1px solid var(--input-border);
-            position: relative; max-width: 450px;
-            width: 90%;
-            box-sizing: border-box;
+            position: relative; max-width: 450px; width: 90%; box-sizing: border-box;
         }
-        .close-suggest { position: absolute; top: 5px; left: 10px; cursor: pointer; color: #ff4d4d; font-weight: bold; font-size: 1.2rem; }
+        .close-suggest { position: absolute; top: 5px; left: 10px; cursor: pointer; color: #ff4d4d; font-weight: bold; }
         .suggest-box { display: flex; gap: 8px; margin-top: 10px; }
         .suggest-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--input-border); outline: none; background: var(--input-bg); color: var(--text-content); }
     </style>
@@ -191,7 +179,7 @@
 <div class="app-container">
     <div class="header">
         <h1>معاني الكلمات</h1>
-        <button onclick="toggleTheme()" id="themeBtn">الوضع المظلم</button>
+        <button onclick="toggleTheme()" id="themeBtn">الوضع الليلي</button>
     </div>
 
     <div class="search-container">
@@ -209,7 +197,6 @@
 
 <div class="footer-suggest" id="footerArea">
     <span class="suggest-link" id="toggleLink" onclick="showSuggestPanel()">هل لديك كلمة جديدة؟</span>
-    
     <div class="hidden-panel" id="suggestPanel">
         <span class="close-suggest" onclick="hideSuggestPanel()">✕</span>
         <div class="suggest-box">
@@ -225,7 +212,7 @@
     function applySavedTheme() {
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? "الوضع النهاري" : "الوضع الليلي";
     }
 
     function toggleTheme() {
@@ -233,7 +220,7 @@
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
+        document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع الليلي";
     }
 
     function showSuggestPanel() {
@@ -253,7 +240,6 @@
         const query = input.value.trim();
 
         if (!query) return;
-        
         resArea.innerHTML = '';
         loader.style.display = 'block';
 
@@ -261,7 +247,6 @@
             const res = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
             const data = await res.json();
             loader.style.display = 'none';
-
             if (data.found) {
                 resArea.innerHTML = `
                     <div class="result-card">
@@ -276,7 +261,7 @@
             }
         } catch (e) {
             loader.style.display = 'none';
-            resArea.innerHTML = '<p style="color:red; text-align:center; margin-top:20px;">خطأ في الاتصال بالقاعدة.</p>';
+            resArea.innerHTML = '<p style="color:red; text-align:center; margin-top:20px;">خطأ في الاتصال.</p>';
         }
     }
 
@@ -284,18 +269,12 @@
         const wordInput = document.getElementById('newWordInput');
         const word = wordInput.value.trim();
         if (!word) return;
-        
         const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
         const entryID = "entry.123456789";
         const formData = new FormData();
         formData.append(entryID, word);
-
         fetch(formURL, { method: "POST", mode: "no-cors", body: formData });
-        
-        document.getElementById('footerArea').innerHTML = `
-            <div style="color: var(--text-labels); font-weight: bold; padding: 20px; animation: slideUp 0.5s;">
-                شكراً لك على مساعدة في تطوير موقعنا. ❤️
-            </div>`;
+        document.getElementById('footerArea').innerHTML = '<div style="color: var(--text-labels); font-weight: bold; padding: 20px;">شكراً لمساهمتك! ❤️</div>';
     }
 
     applySavedTheme();
