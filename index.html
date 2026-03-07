@@ -14,7 +14,7 @@
             --text-content: #1a1a1a;
             --input-bg: #f8fafc; 
             --input-border: #e2e8f0; 
-            --btn-green: #2ecc71; /* لون زر البحث الأخضر */
+            --btn-green: #2ecc71;
             --theme-btn-border: #000000;
             --theme-btn-text: #000000;
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -40,7 +40,7 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            align-items: center; /* توسيط المحتوى أفقياً */
+            align-items: center;
             min-height: 100vh;
             direction: rtl;
             transition: background 0.3s;
@@ -48,26 +48,22 @@
 
         .app-container {
             width: 90%;
-            max-width: 650px; /* العرض الأقصى للتطبيق */
+            max-width: 650px;
             padding: 40px 0;
             display: flex;
             flex-direction: column;
-            align-items: center; /* يضمن توسيط العناصر الداخلية */
+            align-items: center;
         }
 
-        /* الهيدر: يمتد لعرض الحاوية ليضع الزر في أقصى اليسار */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%; 
-            margin-bottom: 30px;
+            margin-bottom: 10px; /* تقليل الهامش السفلي للهيدر */
         }
 
-        .header h1 {
-            font-size: 2.2rem;
-            margin: 0;
-        }
+        .header h1 { font-size: 2.2rem; margin: 0; }
 
         #themeBtn {
             background: transparent;
@@ -77,17 +73,17 @@
             cursor: pointer;
             font-weight: bold;
             color: var(--theme-btn-text);
-            transition: 0.3s;
         }
 
-        /* --- تعديل منطقة البحث لتصبح أصغر وفي المنتصف --- */
+        /* --- شريط البحث: تم إضافة margin-top لتنزيله قليلاً --- */
         .search-container {
             display: flex;
             gap: 10px;
+            margin-top: 40px; /* دفع الشريط والزر للأسفل */
             margin-bottom: 25px;
             height: 55px;
             width: 100%;
-            max-width: 480px; /* تصغير العرض كما طلبت ليكون في المنتصف */
+            max-width: 480px;
             align-items: stretch;
             justify-content: center;
         }
@@ -102,32 +98,31 @@
             outline: none;
             box-shadow: var(--shadow);
             font-size: 1.1rem;
-            min-width: 0; /* لمنع التمدد غير المرغوب في الهواتف */
         }
 
         #searchBtn {
             padding: 0 25px;
             border-radius: 14px;
             border: none;
-            background: var(--btn-green); /* الحفاظ على اللون الأخضر */
+            background: var(--btn-green);
             color: white;
             font-weight: bold;
             cursor: pointer;
             box-shadow: var(--shadow);
-            white-space: nowrap;
         }
 
-        /* باقي التنسيقات (اللودر والبطاقة) */
+        /* لودر الضاد */
         .loader-wrapper { display: none; text-align: center; margin: 30px auto; }
         .dad-loader { font-family: 'Tajawal', sans-serif; font-size: 80px; color: var(--text-word); animation: pulseDad 1.5s infinite; font-weight: 700; }
         @keyframes pulseDad { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.1); opacity: 1; } }
 
+        /* البطاقة */
         .result-card {
             background: var(--bg-card);
             padding: 30px;
             border-radius: 20px;
             box-shadow: var(--shadow);
-            width: 100%; /* تأخذ عرض الحاوية الأقصى 650px */
+            width: 100%;
             box-sizing: border-box;
             border-right: 10px solid var(--text-word);
             animation: slideUp 0.4s ease;
@@ -138,8 +133,18 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* قسم الاقتراحات - تم إصلاح الهيكل */
         .footer-suggest { margin-top: auto; padding: 40px 0; text-align: center; width: 100%; }
         .suggest-link { color: #3b82f6; text-decoration: underline; cursor: pointer; font-weight: bold; }
+        
+        .hidden-panel {
+            display: none; margin: 15px auto 0; padding: 20px; background: var(--bg-card);
+            border-radius: 15px; box-shadow: var(--shadow); border: 1px solid var(--input-border);
+            position: relative; max-width: 400px; width: 90%; box-sizing: border-box;
+        }
+        .close-suggest { position: absolute; top: 5px; left: 10px; cursor: pointer; color: #ff4d4d; font-weight: bold; }
+        .suggest-box { display: flex; gap: 8px; margin-top: 10px; }
+        .suggest-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--input-border); outline: none; background: var(--input-bg); color: var(--text-content); }
     </style>
 </head>
 <body>
@@ -164,7 +169,15 @@
 </div>
 
 <div class="footer-suggest" id="footerArea">
-    <span class="suggest-link" onclick="showSuggest()">هل لديك كلمة جديدة؟</span>
+    <span class="suggest-link" id="toggleLink" onclick="showSuggest()">هل لديك كلمة جديدة؟</span>
+    
+    <div class="hidden-panel" id="suggestPanel">
+        <span class="close-suggest" onclick="hideSuggest()">✕</span>
+        <div class="suggest-box">
+            <input type="text" id="newWordInput" class="suggest-input" placeholder="اكتب الكلمة هنا...">
+            <button onclick="sendNewWord()" style="background: #3b82f6; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">إرسال</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -184,6 +197,17 @@
         document.getElementById('themeBtn').innerText = newTheme === 'dark' ? "الوضع النهاري" : "الوضع المظلم";
     }
 
+    // وظائف إظهار وإخفاء قسم الاقتراحات
+    function showSuggest() {
+        document.getElementById('toggleLink').style.display = 'none';
+        document.getElementById('suggestPanel').style.display = 'block';
+    }
+
+    function hideSuggest() {
+        document.getElementById('toggleLink').style.display = 'inline';
+        document.getElementById('suggestPanel').style.display = 'none';
+    }
+
     async function handleSearch() {
         const input = document.getElementById('wordInput');
         const resArea = document.getElementById('resultArea');
@@ -199,14 +223,7 @@
             const data = await res.json();
             loader.style.display = 'none';
             if (data.found) {
-                resArea.innerHTML = `
-                    <div class="result-card">
-                        <h2>${data.word}</h2>
-                        <span class="label">الجملة الأولى:</span>
-                        <span class="content">${data.sentence1}</span>
-                        <span class="label">الجملة الثانية:</span>
-                        <span class="content">${data.sentence2}</span>
-                    </div>`;
+                resArea.innerHTML = `<div class="result-card"><h2>${data.word}</h2><span class="label">الجملة الأولى:</span><span class="content">${data.sentence1}</span><span class="label">الجملة الثانية:</span><span class="content">${data.sentence2}</span></div>`;
             } else {
                 resArea.innerHTML = '<p style="text-align:center; opacity:0.6; margin-top:20px;">الكلمة غير موجودة.</p>';
             }
@@ -214,6 +231,13 @@
             loader.style.display = 'none';
             resArea.innerHTML = '<p style="color:red; text-align:center;">خطأ في الاتصال.</p>';
         }
+    }
+
+    async function sendNewWord() {
+        const word = document.getElementById('newWordInput').value.trim();
+        if (!word) return;
+        // هنا يمكنك إضافة كود إرسال البيانات (Google Forms مثلاً)
+        document.getElementById('footerArea').innerHTML = '<div style="color: var(--text-labels); font-weight: bold;">شكراً لك! ❤️</div>';
     }
 
     applySavedTheme();
